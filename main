@@ -10,7 +10,7 @@ struct list
 	struct list * prev;
 };
 
-struct list * push_back(struct list * pointer,  int value);
+struct list * push_back(struct list * pointer, int value);
 struct list * delete_index(struct list * poinetr, int _index);
 struct list * pop_back(struct list * pointer);
 int stringCat(char * one, char * two);
@@ -23,31 +23,32 @@ int main(int argc, char ** argv)
 {
 	struct list * toFile = NULL;
 	struct list * fromFile = NULL;
-	FILE * file = fopen((const char*)argv[1],"r+");
+	FILE * file = fopen("input.txt", "r+");
 	int inter = 0;
-	toFile = push_back(toFile,-100);
-	while(1)
+	toFile = push_back(toFile, -100);
+	while (1)
 	{
 		int i;
-		int err = fscanf(file,"%d",&i);
-		if(err == EOF)
+		int err = fscanf(file, "%d", &i);
+		if (err == EOF)
 			break;
-		int errorn = yes(toFile,i);
+		int errorn = yes(toFile, i);
 		//printf("YES!!!\n");
-		//err = yes(toFile,i);
-		//printf("YES!!!\n");
-		if(err==1)
-			fromFile = push_back(fromFile,i);
-		toFile = push_back(toFile,i);
 		err = yes(toFile,i);
-		if(err==1)
+		//printf("YES!!!\n");
+		if (err == 1)
+			fromFile = push_back(fromFile, i);
+		toFile = push_back(toFile, i);
+		err = yes(toFile, i);
+		if (err == 1)
 			printf("1\n");
-		
+
 	}
 	printList(toFile);
-//	deleteList(fromFile);
+	//	deleteList(fromFile);
 	printList(fromFile);
 	fclose(file);
+	system("pause");
 	return(0);
 }
 
@@ -55,7 +56,7 @@ int main(int argc, char ** argv)
 
 struct list * push_back(struct list * pointer, int value)
 {
-	if(pointer == NULL)
+	if (pointer == NULL)
 	{
 		pointer = (struct list*)malloc(sizeof(struct list));
 		pointer->data = value;
@@ -65,7 +66,7 @@ struct list * push_back(struct list * pointer, int value)
 		return(pointer);
 	}
 
-	if(pointer->next == NULL)
+	if (pointer->next == NULL)
 	{
 		struct list * buffer = (struct list*)malloc(sizeof(struct list));
 		buffer->data = value;
@@ -80,7 +81,7 @@ struct list * push_back(struct list * pointer, int value)
 	struct list * cur = pointer->prev;
 	struct list * buffer = (struct list*)malloc(sizeof(struct list));
 	buffer->data = value;
-	buffer->index = cur->index+1;
+	buffer->index = cur->index + 1;
 	cur->next = buffer;
 	pointer->prev = buffer;
 	buffer->prev = cur;
@@ -92,7 +93,7 @@ struct list * push_back(struct list * pointer, int value)
 
 struct list * delete_index(struct list * pointer, int _index)
 {
-	if(pointer == NULL)
+	if (pointer == NULL)
 	{
 		printf("List is Empty!!!\n");
 		return(NULL);
@@ -102,7 +103,7 @@ struct list * delete_index(struct list * pointer, int _index)
 	struct list * pnext = (struct list*)malloc(sizeof(struct list));
 	struct list * pprev = (struct list*)malloc(sizeof(struct list));
 
-	while(buffer->index != _index) buffer=buffer->next;
+	while (buffer->index != _index) buffer = buffer->next;
 
 	pnext = buffer->next;
 	pprev = buffer->prev;
@@ -121,11 +122,11 @@ int stringCat(char * one, char * two)
 	int LengthOne = strlen(one);
 	int LengthTwo = strlen(two);
 
-	if(LengthOne == LengthTwo)
+	if (LengthOne == LengthTwo)
 	{
-		for(int i=0; i<LengthOne; ++i)
+		for (int i = 0; i < LengthOne; ++i)
 		{
-			if(*(one+i) == *(two+i))
+			if (*(one + i) == *(two + i))
 				par = 1;
 			else
 			{
@@ -144,17 +145,17 @@ int stringCat(char * one, char * two)
 
 void printList(struct list * pointer)
 {
-	if(pointer == NULL)
+	if (pointer == NULL)
 	{
 		printf("List is Empty!!!\n");
 		return;
 	}
 
 	struct list * buffer = pointer;
-	do{
-		printf("%d :: %d\n",buffer->data, buffer->index);
-		buffer=buffer->next;
-	} while(buffer != pointer);
+	do {
+		printf("%d :: %d\n", buffer->data, buffer->index);
+		buffer = buffer->next;
+	} while (buffer != pointer);
 	return;
 }
 
@@ -162,13 +163,13 @@ void strcopy(char * toHere, char * fromHere)
 {
 	int length = strlen(fromHere);
 	toHere = (char*)malloc(sizeof(char)*length);
-	for(int i=0; i<length; ++i)
+	for (int i = 0; i < length; ++i)
 		toHere[i] = fromHere[i];
 }
 
 struct list * pop_back(struct list * pointer)
 {
-	if(pointer == NULL)
+	if (pointer == NULL)
 	{
 		printf("List is empty!!!\n");
 		return NULL;
@@ -189,13 +190,13 @@ struct list * pop_back(struct list * pointer)
 
 void deleteList(struct list * pointer)
 {
-	if(pointer == NULL)
+	if (pointer == NULL)
 	{
 		printf("List is Empty\n");
 		return;
 	}
 
-	while(pointer != NULL)
+	while (pointer != NULL)
 		pointer = pop_back(pointer);
 
 	printf("OK!!!\n");
@@ -204,19 +205,23 @@ void deleteList(struct list * pointer)
 
 int yes(struct list * pointer, int value)
 {
-	if(pointer == NULL)
+	if (pointer == NULL)
 	{
-	//	printf("List is empty!!!\n");
+		//	printf("List is empty!!!\n");
 		return(0);
 	}
+	if (pointer->data == value)
+		return(1);
+	if (pointer->next == NULL)
+		return(0);
 
-	struct list * buffer = pointer;
-	do{
-		if(buffer->data == value)
-		{
+	struct list * buffer = (struct list*)malloc(sizeof(struct list));
+	buffer = pointer->next;
+	do {
+		if (buffer->data == value) {
 			return(1);
 		}
 		buffer = buffer->next;
-	} while(buffer != pointer);
+	} while (buffer != pointer);
 	return(0);
 }
